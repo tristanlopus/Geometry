@@ -439,7 +439,7 @@ class GeometryLine(collections.Mapping):
         return math.degrees(self.radiansBetween(other))
 
 
-class Segment(Line):
+class Segment(GeometryLine):
     '''
     A Line subclass with finite length.
     '''
