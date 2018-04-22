@@ -8,15 +8,15 @@ from .exceptions import InfiniteLength, CollinearPoints, ParallelLines
 from .constants import *
 
 
-class Line(collections.Mapping):
+class GeometryLine(collections.Mapping):
     '''
     A line with infinite length defined by two points; A and B.
 
     Usage:
-    >>> a = Line()
+    >>> a = GeometryLine()
     ...
-    >>> b = Line((0,0),(1,1))
-    >>> c = Line(Point(),{'y':1,'x':1})
+    >>> b = GeometryLine((0,0),(1,1))
+    >>> c = GeometryLine(Point(),{'y':1,'x':1})
     >>> b == c
     True
     >>>
@@ -39,17 +39,17 @@ class Line(collections.Mapping):
         :param: ray - Ray subclass
         :return: Line subclass
 
-        Returns a coincident Line object.
+        Returns a coincident GeometryLine object.
         '''
         return cls(ray.A, ray.B)
 
     @classmethod
     def fromLine(cls, line):
         '''
-        :param: line - Line subclass
+        :param: line - GeometryLine subclass
         :return: Line subclass
 
-        Returns a new coincident Line object.
+        Returns a new coincident GeometryLine object.
         '''
         return cls(line.A, line.B)
 
@@ -172,21 +172,21 @@ class Line(collections.Mapping):
     @property
     def normal(self):
         '''
-        :return: Line
+        :return: GeometryLine
 
         Returns a Line normal (perpendicular) to this Line.
         '''
 
         d = self.B - self.A
 
-        return Line([-d.y, d.x], [d.y, -d.x])
+        return GeometryLine([-d.y, d.x], [d.y, -d.x])
 
     def pointAt(self, t):
         '''
         :t: float parameter
         :return: Point subclass
 
-        Varying 't' will produce a new Point along this Line.
+        Varying 't' will produce a new Point along this GeometryLine.
 
         t = 0 -> point A
         t = 1 -> point B
@@ -392,7 +392,7 @@ class Line(collections.Mapping):
 
     def isNormal(self, other):
         '''
-        :param: other - Line subclass
+        :param: other - GeometryLine subclass
         :return: boolean
 
         Returns True if this line is perpendicular to the other line.
@@ -402,7 +402,7 @@ class Line(collections.Mapping):
 
     def radiansBetween(self, other):
         '''
-        :param: other - Line subclass
+        :param: other - GeometryLine subclass
         :return: float
 
         Returns the angle measured between two lines in radians
@@ -483,7 +483,7 @@ class Segment(Line):
         if issubclass(otherType, Point):
             return other.isBetween(self.A, self.B)
 
-        if issubclass(otherType, Line):
+        if issubclass(otherType, GeometryLine):
             return all([other.A.isBetween(self.A, self.B),
                         other.B.isBetween(self.A, self.B)])
 
@@ -499,7 +499,7 @@ class Segment(Line):
         return Segment.fromLine(super().normal)
 
 
-class Ray(Line):
+class Ray(GeometryLine):
     '''
     Rays have head and tail vertices with an infinite length in the
     direction of the head vertex.
